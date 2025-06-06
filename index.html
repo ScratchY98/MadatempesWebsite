@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Minecraft entre amis - Galak.fr</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+    .card {
+      background-color: #2e2e2e;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      margin-top: 10px;
+      background-color: #7289da;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌐 Madatempes - Serveur Minecraft Bedrock</h1>
+    <p>Adresse : <strong>minecraft.galak.fr</strong></p>
+
+    <div class="card">
+      <h2>🔌 Statut du serveur</h2>
+      <p id="status">Chargement...</p>
+      <p id="players"></p>
+      <p id="version"></p>
+    </div>
+  </div>
+
+  <script src="url.js"></script>
+  <script>
+    fetch(getUrl())
+      .then(response => response.json())
+      .then(data => {
+        const online = data.online;
+        document.getElementById("status").textContent = online ? "🟢 En ligne" : "🔴 Hors ligne";
+
+        if (online) {
+          const playersOnline = data.players?.online ?? 0;
+          const playersMax = data.players?.max ?? "inconnu";
+          document.getElementById("players").textContent = `👥 Joueurs : ${playersOnline} / ${playersMax}`;
+
+          const versionName = data.version?.name ?? "inconnue";
+          document.getElementById("version").textContent = `📂 Version : ${versionName}`;
+        } else {
+          document.getElementById("players").textContent = "";
+          document.getElementById("version").textContent = "";
+        }
+      })
+      .catch(() => {
+        document.getElementById("status").textContent = "🔴 Impossible de récupérer les infos.";
+        document.getElementById("players").textContent = "";
+        document.getElementById("version").textContent = "";
+      });
+  </script>
+</body>
+</html>
